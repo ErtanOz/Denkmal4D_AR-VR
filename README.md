@@ -44,7 +44,13 @@ Momentan ist das offizielle MindAR-Beispielziel eingebaut. Ein beliebiges Foto o
 
 Die Anwendung lädt Kameraaufnahmen nicht auf einen Server. Das 3D-Modell ist eine vereinfachte Scan-Version; Form und Textur können gegenüber dem Original abweichen.
 
-## Veröffentlichung
+## Ruhigeres Bildtracking
+
+Seit 19.10.2026 verwendet die AR-Seite `filterMinCF: 0.001; filterBeta: 10; warmupTolerance: 8; missTolerance: 8`. Der kleinere Beta-Wert glättet stärker als der MindAR-Standard (1000), kann bei Bewegung aber mehr Verzögerung verursachen. Die Toleranzen verhindern ein zu schnelles Ein-/Ausblenden bei kurzen Erkennungsunterbrechungen; sie verbessern nicht die gemessene Position. Die anfängliche Modellgröße ist 0,6 statt 0,85, damit kleine Winkelfehler beim hohen Brunnen weniger auffallen.
+
+Das ist eine Ausgangseinstellung, keine am echten Handy vermessene Stabilitätsgarantie. Das Scanbild flach und gut beleuchtet auslegen, vollständig im Kamerabild halten, Spiegelungen vermeiden und das Handy langsam bewegen. [MindAR-Dokumentation zur Glättung](https://hiukim.github.io/mind-ar-js-doc/quick-start/tracking-config/).
+
+## Veröffentlichung mit GitHub Pages
 
 Jeder Push auf `main` startet `.github/workflows/pages.yml`. Der Workflow prüft die JavaScript-Syntax und veröffentlicht `dist/` über GitHub Pages. Das Repository verwendet in **Settings → Pages → Source** die Einstellung **GitHub Actions**. Es sind keine API-Schlüssel oder zusätzlichen Secrets für die Webseite nötig.
 

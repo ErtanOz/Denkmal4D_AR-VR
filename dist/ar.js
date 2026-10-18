@@ -41,8 +41,8 @@ function normalize() {
 function reset() {
   turn = 0;
   document.querySelector('#turntable').setAttribute('rotation', '0 0 0');
-  document.querySelector('#scale').value = '0.85';
-  document.querySelector('#size').object3D.scale.setScalar(0.85);
+  document.querySelector('#scale').value = '0.6';
+  document.querySelector('#size').object3D.scale.setScalar(0.6);
 }
 function releaseCamera() {
   const system = scene.systems?.['mindar-image-system'];

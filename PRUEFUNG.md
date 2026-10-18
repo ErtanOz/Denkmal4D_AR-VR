@@ -1,5 +1,13 @@
 # Prüfstand, 18.10.2026
 
+## Nachprüfung, 19.10.2026: Tracking-Glättung
+
+- Eingestellte Werte im laufenden MindAR-System geprüft: `filterMinCF = 0.001`, `filterBeta = 10`, `warmupTolerance = 8`, `missTolerance = 8`.
+- Neue Anfangsgröße und Reset-Größe: 0,6.
+- JavaScript-Syntaxprüfung und `git diff --check`: bestanden.
+- Erneuter synthetischer Kamera-Test mit unverändertem Scanbild: `targetFound`, Status „Bild erkannt“, Modellanker sichtbar; keine JavaScript-Fehler.
+- Die stärkere Glättung wurde nicht auf einem echten Handy verglichen. Eine messbare Verringerung des Wackelns ist damit noch nicht bestätigt; die Einstellungen können mehr Verzögerung verursachen.
+
 ## Ausgeführt
 
 - JavaScript-Syntax mit `npm run check`: bestanden.

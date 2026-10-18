@@ -2,7 +2,7 @@
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#133c34"><title>Kamera · Brunnen AR</title><link rel="stylesheet" href="ar.css">
 <script src="vendor/aframe-1.6.0.min.js"></script><script src="vendor/mindar-image-aframe-1.2.5.js"></script><script src="ar.js" defer></script><link rel="icon" href="favicon.svg" type="image/svg+xml"></head>
 <body>
-  <a-scene mindar-image="imageTargetSrc: assets/zielbild.mind; autoStart: false; uiLoading: no; uiScanning: no; uiError: no;" color-space="sRGB" renderer="colorManagement: true; alpha: true;" vr-mode-ui="enabled: false" xr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" embedded>
+  <a-scene mindar-image="imageTargetSrc: assets/zielbild.mind; autoStart: false; filterMinCF: 0.001; filterBeta: 10; warmupTolerance: 8; missTolerance: 8; uiLoading: no; uiScanning: no; uiError: no;" color-space="sRGB" renderer="colorManagement: true; alpha: true;" vr-mode-ui="enabled: false" xr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" embedded>
     <a-assets timeout="90000"><a-asset-item id="brunnen-asset" src="assets/brunnen.glb"></a-asset-item></a-assets>
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
     <a-entity id="target" mindar-image-target="targetIndex: 0"><a-entity rotation="90 0 0"><a-entity id="turntable"><a-entity id="size"><a-entity id="brunnen" gltf-model="#brunnen-asset"></a-entity></a-entity></a-entity></a-entity></a-entity>
@@ -12,5 +12,5 @@
   <div id="status" class="status" role="status" aria-live="polite">3D-Modell wird vorbereitet …</div>
   <div id="scan-frame" class="scan-frame" hidden aria-hidden="true"><i></i><span>Das ganze Scanbild im Rahmen halten</span></div>
   <section id="start-panel" class="panel"><p class="eyebrow">DEIN FENSTER NACH KÖLN</p><h1>Bild scannen.<br>Brunnen entdecken.</h1><p>Lege das <a href="target.html" target="_blank" rel="noopener">Scanbild</a> vor dich. Erlaube die Kamera und halte dein Handy darauf.</p><img src="assets/zielbild.png" alt="Dieses MindAR-Testbild wird erkannt" width="160"><button id="start" class="primary" disabled>Modell wird geladen …</button><p id="message" class="hint" role="alert">Die Kamera startet erst nach deinem Tippen. Die Verarbeitung erfolgt im Browser.</p></section>
-  <section id="controls" class="controls" aria-label="Modell anpassen" hidden><label for="scale">Größe <input id="scale" type="range" min="0.4" max="1.8" step="0.05" value="0.85"></label><button id="rotate" aria-label="Modell um 45 Grad drehen">↻ Drehen</button><button id="reset">Zurücksetzen</button></section>
+  <section id="controls" class="controls" aria-label="Modell anpassen" hidden><label for="scale">Größe <input id="scale" type="range" min="0.4" max="1.8" step="0.05" value="0.6"></label><button id="rotate" aria-label="Modell um 45 Grad drehen">↻ Drehen</button><button id="reset">Zurücksetzen</button></section>
 </body></html>
