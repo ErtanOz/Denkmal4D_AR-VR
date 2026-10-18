@@ -1,0 +1,6 @@
+{
+  "name": "haenneschen-brunnen-mindar",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": { "start": "node scripts/serve.mjs", "check": "node --check dist/app.js && node --check dist/ar.js && node --check scripts/serve.mjs" }
+}
