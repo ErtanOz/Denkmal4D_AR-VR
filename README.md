@@ -6,6 +6,16 @@
 
 **AR-Kamera:** https://ertanoz.github.io/Denkmal4D_AR-VR/ar.html?v=touch1
 
+## Material für den Workshop
+
+- [Gesamtes Workshop-Paket mit 6 A4-Seiten](https://ertanoz.github.io/Denkmal4D_AR-VR/workshop/Denkmal4D_Workshop_Paket.pdf): Anleitung, QR-Code zur Live-Demo, Touch-Gesten, Partneraufgaben, Testprotokoll und alle vier großen Scanbilder.
+- [Teilnehmenden-Handout mit 2 Seiten](https://ertanoz.github.io/Denkmal4D_AR-VR/workshop/Denkmal4D_Workshop_Handout.pdf).
+- [Vier Scanbild-Seiten für die Tische](https://ertanoz.github.io/Denkmal4D_AR-VR/workshop/Denkmal4D_Workshop_Scanbilder.pdf).
+
+Druck: Anleitung pro Person; Scanbilder einseitig in A4 bei 100 % pro Tisch. Der QR-Code öffnet die Live-Demo, die großen nummerierten Bilder sind die Erkennungsziele. Kein Workshop-Datum vorausgesetzt; der PDF-Kopf nennt den Bearbeitungsstand. Teilnehmende können das Paket ohne Anmeldung direkt weitergeben.
+
+Erzeugung: `scripts/create-workshop-handout.py` mit Python und `reportlab`, `qrcode`, `Pillow`; Ausgaben unter `output/pdf/`, veröffentlichte Kopien unter `dist/workshop/`. PDF-Seiten wurden gerendert und visuell geprüft; QR-Codes aus den gerenderten Seiten maschinell zurückgelesen. Der physische Ausdruck bleibt praktisch zu testen.
+
 ## Zuordnung
 
 | Nr. / MindAR-Index | Modell | Bild unter `dist/assets/targets/` | Web-Modell unter `dist/assets/` |

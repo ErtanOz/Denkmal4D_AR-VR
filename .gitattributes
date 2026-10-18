@@ -3,3 +3,4 @@ dist/vendor/** -whitespace
 *.glb binary
 *.mind binary
 *.png binary
+*.pdf binary

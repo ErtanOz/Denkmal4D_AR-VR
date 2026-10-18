@@ -1,5 +1,14 @@
 # Prüfstand, 18.10.2026
 
+## Nachprüfung, 19.10.2026: Workshop-Handout
+
+- Drei A4-PDFs erstellt: Teilnehmenden-Handout mit 2 Seiten, vier Scanbild-Seiten, Gesamtpaket mit 6 Seiten. Anleitung zur Live-Demo, QR-Code, Touch-Bedienung, Partneraufgaben, Testprotokoll und Hilfen.
+- Alle sechs Seiten des Gesamtpakets mit Poppler 26.09 gerendert und visuell geprüft; finale Version erneut gerendert und als Kontaktbogen geprüft. Textgrenzen innerhalb des sicheren Seitenbereichs.
+- QR-Codes aus den gerenderten Seiten 1 und 3–6 mit ZXing zurückgelesen: alle öffnen exakt die veröffentlichte AR-Adresse mit `v=touch1`.
+- Die vier in den PDF-Kartenseiten eingebetteten 900×900-Pixel-Marker stimmen unverändert mit den PNG-Erkennungszielen überein.
+- Seitenanzahlen und klickbare Links geprüft. PDF-Kopf nennt den Bearbeitungsstand; es wurde kein Workshop-Termin erfunden.
+- Öffentliche AR-Adresse vor Erstellung per HTTP geprüft (200, aktuelle Touch-Version). Physischer Ausdruck und Scannen des Papiers mit einem echten Handy bleiben praktisch zu testen.
+
 ## Nachprüfung, 19.10.2026: Fingerbedienung in der AR-Kamera
 
 - Ausgangsfehler im laufenden alten AR-Browser reproduziert: ein emulierter Touch-Drag ließ die Modellrotation unverändert (`[0,0,0,1]` vor und nach der Geste). Die interaktive Startseiten-Vorschau hatte eigene Bedienung; die Kameraansicht noch keine Gesten.
