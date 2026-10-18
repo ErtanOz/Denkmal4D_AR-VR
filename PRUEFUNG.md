@@ -1,5 +1,15 @@
 # Prüfstand, 18.10.2026
 
+## Nachprüfung, 19.10.2026: Fingerbedienung in der AR-Kamera
+
+- Ausgangsfehler im laufenden alten AR-Browser reproduziert: ein emulierter Touch-Drag ließ die Modellrotation unverändert (`[0,0,0,1]` vor und nach der Geste). Die interaktive Startseiten-Vorschau hatte eigene Bedienung; die Kameraansicht noch keine Gesten.
+- Native Touch-Ereignisse über Chromium DevTools (`Input.dispatchTouchEvent`, keine manuell ausgelösten DOM-PointerEvents), 390 × 844 Pixel. Kameraeingang weiterhin synthetisch; kein Handy-Hardwaretest.
+- Neun Ablaufgruppen bestanden: Ein-Finger-Rotation; Zwei-Finger-Zoom; Zwei-Finger-Twist; Wechsel von zwei auf einen Finger ohne Sprung; Gestenabbruch; Dropdown/Drehknopf/Reset ohne Änderung anderer Modelle; per Raycasting berührtes Modell bei vier gleichzeitigen Zielen korrekt auswählen und drehen; Zielverlust bricht die Geste ab; Kamerastopp deaktiviert Gesten und entfernt Video.
+- Die Quaternion blieb normalisiert. Beim Vergrößern/Verkleinern blieb `visualViewport.scale` bei 1; der Browser zoomte die Seite nicht.
+- Ergänzend geprüft: Kameraneustart nach Stopp, Zoom-Minimum 0,15 = 25 %, Maximum 3 = 500 %, Prozentanzeige und Reset auf 100 %. Werte bleiben auch bei weitergeführter Pinch-Geste an den Grenzen.
+- Bedienelemente bleiben über der transparenten Gestenfläche erreichbar. Screenshot `output/playwright/ar-touch-mobile.png` visuell geprüft. Testablauf lokal unter `output/playwright/touch-qa.js` (QA-Ausgabe wird nicht ins Repository eingecheckt).
+- Keine JavaScript-Fehler in diesen Browserabläufen. Bekannte nicht blockierende Three.js-Warnung unverändert. Ein echter Safari-/Android-Kamera-/Touchtest und eine vollständige Barrierefreiheitsprüfung stehen weiterhin aus.
+
 ## Nachprüfung, 19.10.2026: vier Modelle und vier eigene Bildmarker
 
 - Vier unterschiedliche, reproduzierbar erzeugte Scanbilder mit Modellnamen und Nummern. `models.json` legt die Reihenfolge 0–3 fest.

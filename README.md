@@ -4,7 +4,7 @@
 
 **Scanbilder zum Drucken:** https://ertanoz.github.io/Denkmal4D_AR-VR/target.html?v=multi1
 
-**AR-Kamera:** https://ertanoz.github.io/Denkmal4D_AR-VR/ar.html?v=multi1
+**AR-Kamera:** https://ertanoz.github.io/Denkmal4D_AR-VR/ar.html?v=touch1
 
 ## Zuordnung
 
@@ -23,7 +23,11 @@ Alle vier Bilder sind gemeinsam in `dist/assets/targets/targets.mind` kompiliert
 2. Die Karten flach, mit Abstand und ohne starke Spiegelungen auslegen. Jedes ganze Bild muss im Kamerabild erkennbar sein.
 3. Auf dem Handy die AR-Seite direkt in Safari oder Chrome öffnen. Modelle laden lassen, „Kamera starten“ wählen und Kamera erlauben.
 4. Ein oder mehrere Bilder erfassen. Jedes Bild zeigt ausschließlich sein zugeordnetes Modell. Bei Zielverlust verschwindet nur dessen Modell.
-5. Unter „Modell bearbeiten“ auswählen, welches Modell gedreht oder vergrößert wird. Größe und Drehung werden pro Modell getrennt gehalten. „Zurücksetzen“ betrifft nur die Auswahl.
+5. Das gewünschte Modell im Kamerabild antippen oder unter „Modell bearbeiten“ auswählen. Mit **einem Finger ziehen**: frei um alle Ansichten drehen und kippen. Mit **zwei Fingern auseinander-/zusammenziehen**: vergrößern/verkleinern. Mit **zwei Fingern verdrehen**: um die Blickrichtung drehen. Größe und Orientierung bleiben pro Modell getrennt gespeichert. „Zurücksetzen“ stellt nur die Auswahl wieder aufrecht und auf 100 %.
+
+Die Gesten gelten für das sichtbare, ausgewählte Modell. Eine auf dem Modell begonnene Geste wählt es automatisch; bei einer Geste auf freier Kamerafläche wird die sichtbare Auswahl verwendet. Die Auswahl bleibt bis zum Ende der Geste fest, auch wenn weitere Marker auftauchen. Verschwindet das Scanbild, endet die Geste; das Modell bleibt weiterhin an seinen Marker gebunden. Ein Finger kann nach einer Zwei-Finger-Geste ohne Sprung weiterdrehen. Die Webseite selbst wird beim Pinch nicht gezoomt. Regler und Knöpfe bleiben erreichbar; mit der Maus funktionieren Ziehen und Mausrad.
+
+Zoom ist auf **25–500 %** der Anfangsgröße begrenzt, damit das Modell weder beliebig klein noch numerisch unbeherrschbar groß wird. Große Modelle können aus dem Kamerabild ragen; „Zurücksetzen“ stellt die Anfangsansicht wieder her. Freie Rotation erfolgt mit Quaternionen um die Modellmitte und in Bezug auf die Blickrichtung. Damit gibt es keine feste Kippgrenze und keine Euler-Winkelsperre. Standardmäßig liegt der Modellfuß auf dem Bild; nach freiem Kippen kann das Objekt die Bildebene schneiden.
 
 Vier gleichzeitige Modelle belasten das Handy stärker. Die tatsächliche Bildrate und Stabilität hängen vom Gerät, Licht und Kamerabild ab. Die Modelle umfassen zusammen etwa 28 MB. Internetverbindung verwenden; Offlinebetrieb wird nicht zugesichert. Kameraaufnahmen werden von dieser Anwendung nicht hochgeladen.
 
@@ -68,7 +72,7 @@ Weihesteine verwendet `--simplify-ratio 0.08`; anschließend `python scripts/pre
 
 ## Tracking und Prüfung
 
-Glättung: `filterMinCF: 0.001; filterBeta: 10`, Ein-/Ausblendtoleranz jeweils 8 Frames. Stärkere Glättung kann mehr Verzögerung verursachen. Modelle starten mit Größe 0,6 relativ zum Scanbild. Jedes Modell wird einzeln anhand seiner Grenzen zentriert; sein Fuß liegt auf der Bildebene.
+Glättung: `filterMinCF: 0.001; filterBeta: 10`, Ein-/Ausblendtoleranz jeweils 8 Frames. Stärkere Glättung kann mehr Verzögerung verursachen. Modelle starten mit Größe 0,6 relativ zum Scanbild. Jedes Modell wird einzeln anhand seiner Grenzen zentriert. In aufrechter Grundstellung liegt sein Fuß auf der Bildebene, gedreht wird um die Mitte.
 
 `npm run check` prüft JavaScript-Syntax. Ergebnisse und Grenzen stehen in `PRUEFUNG.md`. Vier gleichzeitige Erkennungen wurden mit einem synthetischen Kamerastream geprüft. Ein echter Handy-Kameratest steht weiterhin aus.
 
