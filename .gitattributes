@@ -1,0 +1,5 @@
+# Preserve upstream bundles; whitespace inside bundled shaders/templates is upstream code.
+dist/vendor/** -whitespace
+*.glb binary
+*.mind binary
+*.png binary
