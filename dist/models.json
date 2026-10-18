@@ -1,0 +1,6 @@
+[
+  {"id":"brunnen","name":"Hänneschen-Brunnen","model":"assets/brunnen.glb","target":"assets/targets/brunnen.png","targetIndex":0,"sourceFile":"haennesschen_brunnen_an_der_dau.glb"},
+  {"id":"grabstein","name":"Grabstein","model":"assets/grabstein.glb","target":"assets/targets/grabstein.png","targetIndex":1,"sourceFile":"Grabstein_3DModel.glb"},
+  {"id":"loewenherz","name":"Löwenherz Köln","model":"assets/loewenherz.glb","target":"assets/targets/loewenherz.png","targetIndex":2,"sourceFile":"löwenherzkoeln_3DModel.glb"},
+  {"id":"weihesteine","name":"Weihesteine","model":"assets/weihesteine.glb","target":"assets/targets/weihesteine.png","targetIndex":3,"sourceFile":"rgm_weihesteine2.glb"}
+]

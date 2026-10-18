@@ -1,5 +1,20 @@
 # Prüfstand, 18.10.2026
 
+## Nachprüfung, 19.10.2026: vier Modelle und vier eigene Bildmarker
+
+- Vier unterschiedliche, reproduzierbar erzeugte Scanbilder mit Modellnamen und Nummern. `models.json` legt die Reihenfolge 0–3 fest.
+- Alle vier Bilder mit dem offiziellen MindAR-Compiler 1.2.5 im Browser zu `assets/targets/targets.mind` kompiliert: 4 Ziele, 2.157.949 Bytes.
+- Alle vier GLB-Webmodelle geladen. Einzelne Vorschaubilder von Grabstein, Löwenherz und korrigiertem Weihestein aufgenommen und angesehen.
+- Echter MindAR-Detektor mit synthetischem Canvas-Kamerastream (1600 × 1200 Pixel): alle vier Marker erkannt, Status „4 / 4 sichtbar“, vier unabhängige sichtbare Modellanker. Keine echten Kameraaufnahmen verwendet.
+- Nur Grabstein-Marker aus dem Stream entfernt: nur dessen Modellanker verschwindet; die anderen drei bleiben sichtbar.
+- Löwenherz ausgewählt und gedreht: nur dessen Drehung 45 Grad, die anderen drei 0 Grad. Reset geprüft.
+- Startseite bei 390 × 844 Pixel: vier Modelloptionen, kein horizontaler Überlauf. Druckkartenansicht separat geprüft.
+- Bilddateien im ZIP zum Herunterladen. Drucklayout: eine quadratische Karte pro A4-Seite. Kein physischer Ausdruck getestet.
+- Weihesteine: Webkopie auf ca. 5,76 MB vereinfacht, Z-Achse nach Y gedreht, neutrales nichtmetallisches Material ergänzt. Keine ursprüngliche Textur vorhanden. Originaldatei unverändert.
+- Glättung aus der vorherigen Änderung beibehalten. Vier Modelle brauchen mehr Geräte-/GPU-Leistung. Bildrate und Stabilität auf einem echten Handy sind weiterhin ungeprüft.
+
+Die älteren Abschnitte dokumentieren den ursprünglichen Einzelmodell-Stand; aktuelle Scanbilder liegen unter `assets/targets/` und ersetzen das frühere Testbild.
+
 ## Nachprüfung, 19.10.2026: Tracking-Glättung
 
 - Eingestellte Werte im laufenden MindAR-System geprüft: `filterMinCF = 0.001`, `filterBeta = 10`, `warmupTolerance = 8`, `missTolerance = 8`.

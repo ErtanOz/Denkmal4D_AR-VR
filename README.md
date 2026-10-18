@@ -1,10 +1,33 @@
-# Hänneschen-Brunnen mit MindAR
+# Denkmal4D – vier eigene Scanbilder, vier 3D-Modelle
 
-Handy-Webseite mit Bildtracking, 3D-Vorschau, druckbarem Scanbild, Größenregler und Drehfunktion. Das Repository enthält die optimierte Web-Version des Modells. Das lokale Originalmodell bleibt unverändert.
+**Webseite:** https://ertanoz.github.io/Denkmal4D_AR-VR/
 
-**Webseite:** https://ErtanOz.github.io/Denkmal4D_AR-VR/
+**Scanbilder zum Drucken:** https://ertanoz.github.io/Denkmal4D_AR-VR/target.html?v=multi1
 
-**Scanbild:** https://ErtanOz.github.io/Denkmal4D_AR-VR/target.html
+**AR-Kamera:** https://ertanoz.github.io/Denkmal4D_AR-VR/ar.html?v=multi1
+
+## Zuordnung
+
+| Nr. / MindAR-Index | Modell | Bild unter `dist/assets/targets/` | Web-Modell unter `dist/assets/` |
+| --- | --- | --- | --- |
+| 01 / 0 | Hänneschen-Brunnen | `brunnen.png` | `brunnen.glb` |
+| 02 / 1 | Grabstein | `grabstein.png` | `grabstein.glb` |
+| 03 / 2 | Löwenherz Köln | `loewenherz.png` | `loewenherz.glb` |
+| 04 / 3 | Weihesteine | `weihesteine.png` | `weihesteine.glb` |
+
+Alle vier Bilder sind gemeinsam in `dist/assets/targets/targets.mind` kompiliert. `models.json` dokumentiert die feste Reihenfolge. Die AR-Seite hat vier unabhängige Anker und `maxTrack: 4`. Das frühere offizielle Testbild `zielbild.png` wird von dieser neuen Version nicht mehr erkannt.
+
+## Mit dem Handy ausprobieren
+
+1. Die Druckseite am PC öffnen. Alle vier Karten (eine pro Seite) oder über „Nur diese Karte öffnen“ eine einzelne Karte ausdrucken.
+2. Die Karten flach, mit Abstand und ohne starke Spiegelungen auslegen. Jedes ganze Bild muss im Kamerabild erkennbar sein.
+3. Auf dem Handy die AR-Seite direkt in Safari oder Chrome öffnen. Modelle laden lassen, „Kamera starten“ wählen und Kamera erlauben.
+4. Ein oder mehrere Bilder erfassen. Jedes Bild zeigt ausschließlich sein zugeordnetes Modell. Bei Zielverlust verschwindet nur dessen Modell.
+5. Unter „Modell bearbeiten“ auswählen, welches Modell gedreht oder vergrößert wird. Größe und Drehung werden pro Modell getrennt gehalten. „Zurücksetzen“ betrifft nur die Auswahl.
+
+Vier gleichzeitige Modelle belasten das Handy stärker. Die tatsächliche Bildrate und Stabilität hängen vom Gerät, Licht und Kamerabild ab. Die Modelle umfassen zusammen etwa 28 MB. Internetverbindung verwenden; Offlinebetrieb wird nicht zugesichert. Kameraaufnahmen werden von dieser Anwendung nicht hochgeladen.
+
+Die neuen Karten sind detailreiche, unterschiedliche Bildmarker und keine QR-Codes. Sie sind mit `scripts/create-targets.py` deterministisch erzeugt. Ein QR-Code könnte zusätzlich den Webseitenlink öffnen; MindAR erkennt hier das vollständige Bild.
 
 ## Lokal starten
 
@@ -14,63 +37,47 @@ Node.js installieren, in diesem Ordner ein Terminal öffnen und ausführen:
 npm start
 ```
 
-Am PC: http://localhost:5173. Kein npm install erforderlich. Der Server lauscht nur lokal.
+Am PC: http://localhost:5173. Kein `npm install` erforderlich. Der Server lauscht nur auf dem lokalen PC. Auf dem Handy benötigt die Kamera eine HTTPS-Adresse; die normale HTTP-WLAN-Adresse reicht nicht. Kein Öffnen per `file://`.
 
-## Mit dem Handy verwenden
-
-1. Die oben verlinkte GitHub-Pages-Adresse direkt in Safari (iPhone) oder Chrome (Android) öffnen. Die Webseite ist öffentlich, ohne Anmeldung.
-2. `target.html` am PC öffnen und das Scanbild ausdrucken oder am PC anzeigen.
-3. Am Handy „AR mit Kamera starten“ und danach „Kamera starten“ wählen. Kamera erlauben.
-4. Das ganze Scanbild erfassen, langsam bewegen und gut beleuchten. Das Modell bleibt an das Bild gebunden und verschwindet, wenn das Bild nicht mehr erkannt wird.
-
-Eine gewöhnliche HTTP-WLAN-Adresse reicht am Handy nicht: Kamerazugriff braucht HTTPS. `localhost` auf dem Handy bezeichnet das Handy selbst. Für eine eigene Bereitstellung den gesamten Inhalt von `dist/` auf einen HTTPS-fähigen statischen Webserver kopieren. Die Kamera muss im Browser zugelassen sein. Kein Öffnen über `file://`.
-
-## Eigenes Scanbild
-
-Momentan ist das offizielle MindAR-Beispielziel eingebaut. Ein beliebiges Foto oder QR-Code wird **nicht** automatisch erkannt. Ein QR-Code kann lediglich den Link zur Seite öffnen.
-
-1. Ein detailreiches Foto im [offiziellen MindAR-Compiler](https://hiukim.github.io/mind-ar-js-doc/tools/compile/) kompilieren.
-2. Die exportierte `.mind`-Datei als `dist/assets/zielbild.mind` speichern (genau ein Ziel, Index 0).
-3. Genau das zugehörige Bild als `dist/assets/zielbild.png` speichern.
-4. Neu veröffentlichen bzw. lokalen Server nutzen und Browser neu laden.
-
-## Dateien und Technik
-
-- `dist/index.html`: Startseite mit drehbarer 3D-Vorschau.
-- `dist/ar.html`, `ar.js`: MindAR-Kamera und Bildtracking; Kamera startet nach Tippen und stoppt beim Verlassen/Hintergrundwechsel.
-- `dist/target.html`: Druckseite für das Zielbild.
-- `dist/assets/brunnen.glb`: mobile Ableitung (ca. 6,2 MB, reduzierte Geometrie und Textur bis 2048 Pixel).
-- `dist/vendor/`: A-Frame 1.6.0, MindAR 1.2.5, model-viewer 4.0.0. Bibliotheken lokal; die Vorschau-Bibliothek kann zusätzlich Ressourcen von Google laden, Schriftarten kommen von Google Fonts. MindAR kann Laufzeitressourcen wie TensorFlow/WASM nachladen. Internetverbindung verwenden; kein garantierter Offlinebetrieb.
-
-Die Anwendung lädt Kameraaufnahmen nicht auf einen Server. Das 3D-Modell ist eine vereinfachte Scan-Version; Form und Textur können gegenüber dem Original abweichen.
-
-## Ruhigeres Bildtracking
-
-Seit 19.10.2026 verwendet die AR-Seite `filterMinCF: 0.001; filterBeta: 10; warmupTolerance: 8; missTolerance: 8`. Der kleinere Beta-Wert glättet stärker als der MindAR-Standard (1000), kann bei Bewegung aber mehr Verzögerung verursachen. Die Toleranzen verhindern ein zu schnelles Ein-/Ausblenden bei kurzen Erkennungsunterbrechungen; sie verbessern nicht die gemessene Position. Die anfängliche Modellgröße ist 0,6 statt 0,85, damit kleine Winkelfehler beim hohen Brunnen weniger auffallen.
-
-Das ist eine Ausgangseinstellung, keine am echten Handy vermessene Stabilitätsgarantie. Das Scanbild flach und gut beleuchtet auslegen, vollständig im Kamerabild halten, Spiegelungen vermeiden und das Handy langsam bewegen. [MindAR-Dokumentation zur Glättung](https://hiukim.github.io/mind-ar-js-doc/quick-start/tracking-config/).
-
-## Veröffentlichung mit GitHub Pages
-
-Jeder Push auf `main` startet `.github/workflows/pages.yml`. Der Workflow prüft die JavaScript-Syntax und veröffentlicht `dist/` über GitHub Pages. Das Repository verwendet in **Settings → Pages → Source** die Einstellung **GitHub Actions**. Es sind keine API-Schlüssel oder zusätzlichen Secrets für die Webseite nötig.
-
-## Nachvollziehbare Modelloptimierung
-
-Dieser Befehl wurde mit dem lokalen Originalmodell ausgeführt. Das Original ist nicht im Repository enthalten; der Lauf ist für den normalen Start nicht nötig.
+## Bilder neu erzeugen / kompilieren
 
 ```powershell
-npx --yes @gltf-transform/cli@4.5.1 optimize ../haennesschen_brunnen_an_der_dau.glb dist/assets/brunnen.glb --compress false --texture-compress auto --texture-size 2048 --simplify-ratio 0.3 --simplify-error 0.001 --instance false
+python -m pip install Pillow
+python scripts/create-targets.py
+npm start
 ```
 
-Das Modell wird beim Laden anhand seiner tatsächlichen Grenzen zentriert und auf die Breite des Bildes skaliert. Der Modellfuß liegt auf der Bildebene. Bei liegendem Scanbild steht der Brunnen; bei aufrechtem Bild ragt er aus dem Bild heraus.
+Dann http://localhost:5173/tools/compile.html öffnen, „Alle vier Bilder kompilieren“ wählen und die heruntergeladene Datei als `dist/assets/targets/targets.mind` speichern. Der Browser lädt hierfür den offiziellen MindAR-Compiler von jsDelivr. Bilder und Erkennungsdatei müssen zusammenpassen. Wird die Reihenfolge geändert, müssen die Indizes in `ar.html` ebenfalls angepasst werden. Die kompilierten Dateien sind bereits enthalten; zum normalen Start ist keine Neukompilierung nötig.
 
-## Quellen und Lizenzen
+## Web-Kopien der Modelle
 
-- Modell: **Digital Heritage Lab**, [Haennesschen Brunnen an der Dau](https://sketchfab.com/3d-models/haennesschen-brunnen-an-der-dau-f79426ea54ec40bea6f6c24eb8af9900), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Für diese Anwendung verkleinert; Originalmetadaten erhalten.
-- [MindAR](https://github.com/hiukim/mind-ar-js), MIT, einschließlich unverändertem `card-example`-Zielbild und Erkennungsdatei.
-- [A-Frame](https://github.com/aframevr/aframe), MIT.
-- [model-viewer](https://github.com/google/model-viewer), Apache 2.0.
+Die vom Nutzer in `mindar-brunnen/dist/assets` bereitgestellten Originaldateien bleiben lokal unverändert. Dieses Repository enthält optimierte Ableitungen:
 
-## Prüfung
+- Brunnen: ca. 6,23 MB; ursprüngliches lokales GLB ca. 43,67 MB.
+- Grabstein: ca. 5,45 MB statt 10,84 MB.
+- Löwenherz: ca. 10,55 MB statt 19,99 MB.
+- Weihesteine: ca. 5,76 MB statt 72 MB; vertikale Z-Achse auf Y gedreht und neutrales Steinmaterial ergänzt, weil das Original ohne Materialien/Texturebenen exportiert wurde. Die Darstellung ist eine ergänzte Web-Darstellung, keine rekonstruierte Originaltextur.
 
-`npm run check` prüft JavaScript-Syntax. Browser-Prüfungen und ihre Grenzen stehen in `PRUEFUNG.md`. Ein echter Handy-Kameratest ist für eine endgültige Freigabe erforderlich.
+Optimiert mit glTF Transform 4.5.1, ohne zusätzliche Meshdecoder, Texturen höchstens 2048 Pixel. Beispiel für Grabstein und Löwenherz:
+
+```powershell
+npx --yes @gltf-transform/cli@4.5.1 optimize INPUT.glb OUTPUT.glb --compress false --texture-compress auto --texture-size 2048 --simplify-ratio 0.25 --simplify-error 0.001 --instance false
+```
+
+Weihesteine verwendet `--simplify-ratio 0.08`; anschließend `python scripts/prepare-weihesteine.py` für die Achsen- und Materialkorrektur der Web-Kopie. Form und Details können von den Originalen abweichen.
+
+## Tracking und Prüfung
+
+Glättung: `filterMinCF: 0.001; filterBeta: 10`, Ein-/Ausblendtoleranz jeweils 8 Frames. Stärkere Glättung kann mehr Verzögerung verursachen. Modelle starten mit Größe 0,6 relativ zum Scanbild. Jedes Modell wird einzeln anhand seiner Grenzen zentriert; sein Fuß liegt auf der Bildebene.
+
+`npm run check` prüft JavaScript-Syntax. Ergebnisse und Grenzen stehen in `PRUEFUNG.md`. Vier gleichzeitige Erkennungen wurden mit einem synthetischen Kamerastream geprüft. Ein echter Handy-Kameratest steht weiterhin aus.
+
+## Veröffentlichung und Quellen
+
+Jeder Push auf `main` veröffentlicht `dist/` mit `.github/workflows/pages.yml` über GitHub Pages. Einstellungen: **Settings → Pages → Source → GitHub Actions**. Keine zusätzlichen API-Schlüssel nötig.
+
+- Brunnenmodell: **Digital Heritage Lab**, [Haennesschen Brunnen an der Dau](https://sketchfab.com/3d-models/haennesschen-brunnen-an-der-dau-f79426ea54ec40bea6f6c24eb8af9900), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), für Web verkleinert.
+- Die weiteren Modelle stammen aus den vom Nutzer bereitgestellten Dateien. In ihren GLB-Metadaten waren keine Autoren-/Lizenzangaben enthalten; es werden keine zusätzlichen Angaben erfunden.
+- [MindAR](https://github.com/hiukim/mind-ar-js), MIT; [Mehrfachtracking](https://hiukim.github.io/mind-ar-js-doc/examples/multi-tracks/).
+- [A-Frame](https://github.com/aframevr/aframe), MIT; [model-viewer](https://github.com/google/model-viewer), Apache 2.0. Lizenzdateien unter `dist/vendor/`.
+- Laufzeitbibliotheken liegen lokal. Model-viewer, MindAR und die Google-Schriftarten können weitere Laufzeitressourcen nachladen.

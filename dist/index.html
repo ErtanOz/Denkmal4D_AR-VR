@@ -3,34 +3,34 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#133c34">
-  <meta name="description" content="Entdecke den Hänneschen-Brunnen als 3D-Modell auf einem Bild mit deiner Handykamera.">
-  <title>Hänneschen-Brunnen · AR erleben</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Vier Denkmäler als 3D-Modelle auf vier eigenen Scanbildern entdecken.">
+  <title>Denkmal4D · Vier Objekte in AR</title>
+  <link rel="stylesheet" href="style.css?v=multi1">
   <script type="module" src="vendor/model-viewer-4.0.0.min.js"></script>
-  <script src="app.js" defer></script>
+  <script src="app.js?v=multi1" defer></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml"></head>
 <body>
-  <header class="site-header"><a class="brand" href="./"><span class="brand-icon">B</span> BRUNNEN / AR</a><span class="tag">KÖLN · AN DER DAU</span></header>
+  <header class="site-header"><a class="brand" href="./"><span class="brand-icon">B</span> DENKMAL / 4D</a><span class="tag">VIER OBJEKTE · VIER SCANBILDER</span></header>
   <main>
     <section class="hero">
       <div class="intro"><p class="eyebrow"><span class="dot"></span> EIN STÜCK KÖLN. NEU ENTDECKT.</p>
-        <h1>Ein kleiner Brunnen.<br>Ein neuer <em>Blick.</em></h1>
-        <p class="lead">Hol dir den Hänneschen-Brunnen auf den Tisch. Ein Bild, deine Handykamera – und Kölner Stadtgeschichte wird dreidimensional.</p>
-        <a class="button primary" href="ar.html">AR mit Kamera starten <span aria-hidden="true">↗</span></a>
-        <a class="text-link" href="target.html" target="_blank" rel="noopener">Scanbild öffnen & ausdrucken <span aria-hidden="true">↗</span></a>
-        <p class="small">Keine App nötig · Bild scannen · Modell entdecken</p>
+        <h1>Vier Bilder.<br>Eine neue <em>Perspektive.</em></h1>
+        <p class="lead">Brunnen, Grabstein, Löwenherz und Weihesteine: Jedes Scanbild bringt sein eigenes 3D-Modell auf deinen Tisch. Auch mehrere gleichzeitig.</p>
+        <a class="button primary" href="ar.html?v=multi1">AR mit Kamera starten <span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="target.html" target="_blank" rel="noopener">Vier Scanbilder öffnen & drucken <span aria-hidden="true">↗</span></a>
+        <p class="small">Keine App nötig · Vier eigene Bilder · Bis zu vier Modelle</p>
       </div>
       <div class="model-card">
-        <div class="model-label"><span>01 / HÄNNESCHEN-BRUNNEN</span><span class="live-label">3D-ANSICHT</span></div>
-        <model-viewer id="preview" src="assets/brunnen.glb" alt="3D-Modell des Hänneschen-Brunnens an der Dau" camera-controls auto-rotate shadow-intensity="0.7" exposure="1" camera-orbit="25deg 70deg auto" touch-action="pan-y"><div slot="progress-bar" class="loading" id="model-loading">Brunnen wird geladen …</div></model-viewer>
+        <div class="model-label"><span id="preview-label">01 / HÄNNESCHEN-BRUNNEN</span><span class="live-label">3D-ANSICHT</span></div>
+        <label class="preview-select" for="preview-model">3D-Modell wählen <select id="preview-model"></select></label><model-viewer id="preview" src="assets/brunnen.glb" alt="3D-Modell des Hänneschen-Brunnens an der Dau" camera-controls auto-rotate shadow-intensity="0.7" exposure="1" camera-orbit="25deg 70deg auto" touch-action="pan-y"><div slot="progress-bar" class="loading" id="model-loading">Modell wird geladen …</div></model-viewer>
         <div class="model-caption"><span>Mit dem Finger drehen & vergrößern</span><span aria-hidden="true">⤢</span></div>
-        <p class="model-error" id="preview-error" hidden>Die 3D-Vorschau konnte nicht geladen werden. Bitte lade die Seite erneut.</p>
+        <a id="selected-target" class="preview-target" href="target.html?model=brunnen" target="_blank" rel="noopener">Passendes Scanbild öffnen ↗</a><p class="model-error" id="preview-error" hidden>Die 3D-Vorschau konnte nicht geladen werden. Bitte lade die Seite erneut.</p>
       </div>
     </section>
     <section class="guide" aria-labelledby="guide-title"><div><p class="eyebrow">SO FUNKTIONIERT’S</p><h2 id="guide-title">Vom Bild in deinen Raum.</h2></div>
-      <ol class="steps"><li><span>01</span><h3>Scanbild bereitlegen</h3><p>Öffne das Testbild auf einem zweiten Bildschirm oder drucke es aus.</p></li><li><span>02</span><h3>Kamera erlauben</h3><p>Öffne diese Seite auf dem Handy und tippe auf „AR mit Kamera starten“.</p></li><li><span>03</span><h3>Den Brunnen entdecken</h3><p>Halte die Kamera auf das ganze Scanbild. Der Brunnen erscheint darauf.</p></li></ol>
+      <ol class="steps"><li><span>01</span><h3>Scanbild bereitlegen</h3><p>Drucke eine oder mehrere der vier Karten aus. Jede Karte gehört zu einem eigenen Modell.</p></li><li><span>02</span><h3>Kamera erlauben</h3><p>Öffne diese Seite auf dem Handy und tippe auf „AR mit Kamera starten“.</p></li><li><span>03</span><h3>Die Sammlung entdecken</h3><p>Halte ein oder mehrere ganze Scanbilder in die Kamera. Jedes passende Modell erscheint auf seiner Karte.</p></li></ol>
     </section>
-    <section class="target-strip"><img src="assets/zielbild.png" alt="Offizielles MindAR-Testbild: illustrierte Visitenkarte" width="160"><div><h2>Dieses Bild ist dein Startpunkt.</h2><p>Die Demo erkennt genau dieses MindAR-Testbild. Ein eigenes Foto muss zuerst als Erkennungsziel vorbereitet werden.</p><a href="target.html" class="text-link" target="_blank" rel="noopener">Scanbild in voller Größe öffnen ↗</a></div></section>
+    <section class="target-strip"><img src="assets/targets/brunnen.png" alt="Neues Scanbild 01 für den Brunnen" width="160"><div><h2>Ein eigenes Bild für jedes Objekt.</h2><p>Vier nummerierte Karten, eindeutig zugeordnet. Lege sie mit etwas Abstand nebeneinander, um mehrere Modelle gleichzeitig zu sehen.</p><a href="target.html" class="text-link" target="_blank" rel="noopener">Alle vier Karten öffnen ↗</a></div></section>
   </main>
-  <footer><span>Ein digitales Stück Stadtgeschichte.</span><span>Modell: <a href="https://sketchfab.com/3d-models/haennesschen-brunnen-an-der-dau-f79426ea54ec40bea6f6c24eb8af9900" target="_blank" rel="noopener">Digital Heritage Lab</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Web-Version verkleinert<br>Bildtracking mit <a href="https://hiukim.github.io/mind-ar-js-doc/">MindAR</a> · Kameraaufnahmen werden von dieser Anwendung nicht hochgeladen.</span></footer>
+  <footer><span>Ein digitales Stück Stadtgeschichte.</span><span>Brunnenmodell: <a href="https://sketchfab.com/3d-models/haennesschen-brunnen-an-der-dau-f79426ea54ec40bea6f6c24eb8af9900" target="_blank" rel="noopener">Digital Heritage Lab</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Web-Version verkleinert<br>Bildtracking mit <a href="https://hiukim.github.io/mind-ar-js-doc/">MindAR</a> · Kameraaufnahmen werden von dieser Anwendung nicht hochgeladen.</span></footer>
 </body></html>

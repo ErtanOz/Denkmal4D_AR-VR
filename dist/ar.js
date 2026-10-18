@@ -1,103 +1,108 @@
-/* MindAR 1.2.5 / A-Frame 1.6.0. All camera processing stays in the browser. */
+/* Four independent MindAR anchors. Camera processing stays in the browser. */
 const scene = document.querySelector('a-scene');
-const model = document.querySelector('#brunnen');
-const target = document.querySelector('#target');
-const start = document.querySelector('#start');
-const stop = document.querySelector('#stop');
-const panel = document.querySelector('#start-panel');
-const status = document.querySelector('#status');
-const message = document.querySelector('#message');
-const controls = document.querySelector('#controls');
-const frame = document.querySelector('#scan-frame');
-let modelReady = false, running = false, busy = false, wantsCamera = false, turn = 0;
+const start = document.querySelector('#start'), stop = document.querySelector('#stop');
+const panel = document.querySelector('#start-panel'), status = document.querySelector('#status');
+const message = document.querySelector('#message'), controls = document.querySelector('#controls');
+const frame = document.querySelector('#scan-frame'), selector = document.querySelector('#active-model');
+const slider = document.querySelector('#scale');
+const states = [...document.querySelectorAll('[data-model]')].map(anchor => ({
+  id: anchor.dataset.model, name: anchor.dataset.name, anchor,
+  model: anchor.querySelector('.model'), size: anchor.querySelector('.size'),
+  turntable: anchor.querySelector('.turntable'), scale: 0.6, turn: 0, ready: false, error: false
+}));
+const visible = new Set();
+let running = false, busy = false, wantsCamera = false;
 const secure = window.isSecureContext && !!navigator.mediaDevices?.getUserMedia;
-function ready() {
+function active() { return states.find(s => s.id === selector.value) || states[0]; }
+function updateReady() {
   if (!secure) {
     status.textContent = 'Für die Kamera ist HTTPS erforderlich';
-    message.textContent = 'Öffne am Handy die HTTPS-Adresse. Eine normale HTTP-Adresse im WLAN erlaubt keinen Kamerazugriff. Am PC funktioniert auch localhost.';
-    start.textContent = 'HTTPS-Adresse erforderlich';
-    return;
+    message.textContent = 'Öffne am Handy die HTTPS-Adresse. Am PC funktioniert auch localhost.';
+    start.textContent = 'HTTPS-Adresse erforderlich'; return;
   }
-  if (modelReady && scene.hasLoaded) { start.disabled = false; start.textContent = 'Kamera starten'; status.textContent = 'Bereit zum Scannen'; }
+  if (running || busy) return;
+  const loaded = states.filter(s => s.ready).length;
+  const settled = states.filter(s => s.ready || s.error).length;
+  status.textContent = `${loaded} / ${states.length} Modelle geladen`;
+  start.disabled = !scene.hasLoaded || settled < states.length || loaded === 0;
+  start.textContent = start.disabled ? `Modelle laden (${loaded}/${states.length}) …` : 'Kamera starten';
+  if (!start.disabled) status.textContent = 'Bereit · Vier verschiedene Scanbilder';
+  const failed = states.filter(s => s.error).map(s => s.name);
+  if (failed.length) message.textContent = `Nicht geladen: ${failed.join(', ')}. Andere Modelle können weiter verwendet werden. Zum erneuten Laden die Seite neu öffnen.`;
 }
-function normalize() {
-  if (modelReady) return;
-  const object = model.getObject3D('mesh');
+function normalize(state) {
+  if (state.ready || state.error) return;
+  const object = state.model.getObject3D('mesh');
   if (!object) return;
-  // Detached clone gives bounds in model space, independent of target rotation.
-  const clone = object.clone();
-  clone.updateMatrixWorld(true);
+  const clone = object.clone(); clone.updateMatrixWorld(true);
   const box = new AFRAME.THREE.Box3().setFromObject(clone);
   const size = box.getSize(new AFRAME.THREE.Vector3());
   const center = box.getCenter(new AFRAME.THREE.Vector3());
   const base = Math.max(size.x, size.z);
-  if (!Number.isFinite(base) || base <= 0) return fail(new Error('Das Modell hat keine gültige Größe.'));
+  if (!Number.isFinite(base) || base <= 0) {state.error = true; updateReady(); return;}
   const factor = 1 / base;
-  model.object3D.scale.setScalar(factor);
-  model.object3D.position.set(-center.x * factor, -box.min.y * factor, -center.z * factor);
-  modelReady = true;
-  reset(); ready();
+  state.model.object3D.scale.setScalar(factor);
+  state.model.object3D.position.set(-center.x * factor, -box.min.y * factor, -center.z * factor);
+  state.size.object3D.scale.setScalar(state.scale);
+  state.ready = true; updateReady();
 }
-function reset() {
-  turn = 0;
-  document.querySelector('#turntable').setAttribute('rotation', '0 0 0');
-  document.querySelector('#scale').value = '0.6';
-  document.querySelector('#size').object3D.scale.setScalar(0.6);
+function refreshTracking() {
+  if (!running) return;
+  frame.hidden = visible.size > 0;
+  status.textContent = visible.size ? `${visible.size} / ${states.length} sichtbar · ${states.filter(s => visible.has(s.id)).map(s => s.name).join(', ')}` : 'Scanbilder suchen · Ganzes Bild erfassen';
+  [...selector.options].forEach(o => {const s = states.find(s => s.id === o.value); o.textContent = `${s.name}${visible.has(s.id) ? ' · sichtbar' : ''}`;});
 }
 function releaseCamera() {
   const system = scene.systems?.['mindar-image-system'];
-  // MindAR's stop() assumes camera + controller exist; permission denial has neither.
   if (system?.controller && system.video?.srcObject) {
     try { system.stop(); } catch (error) { console.warn('AR-Aufräumen:', error); }
   }
-  document.querySelectorAll('video').forEach(video => {
-    video.srcObject?.getTracks().forEach(track => track.stop());
-    video.remove();
-  });
-  target.object3D.visible = false;
+  document.querySelectorAll('video').forEach(video => {video.srcObject?.getTracks().forEach(track => track.stop());video.remove();});
+  visible.clear(); states.forEach(s => {s.anchor.object3D.visible = false;});
 }
 function fail(error) {
-  running = false; busy = false; wantsCamera = false;
-  releaseCamera();
+  running = false; busy = false; wantsCamera = false; releaseCamera();
   panel.hidden = false; stop.hidden = true; controls.hidden = true; frame.hidden = true;
   status.textContent = 'AR konnte nicht gestartet werden';
-  const name = error?.name || error?.cause?.name;
-  message.textContent = name === 'NotAllowedError' ? 'Der Kamerazugriff wurde abgelehnt. Erlaube die Kamera in den Browser-Einstellungen und versuche es erneut.' : name === 'NotFoundError' ? 'Keine Kamera gefunden. Öffne diese Seite auf einem Handy mit Kamera.' : name === 'NotReadableError' ? 'Die Kamera ist gerade nicht verfügbar. Schließe andere Kamera-Apps und versuche es erneut.' : 'Kamera oder AR konnte nicht geladen werden. Prüfe die Kameraberechtigung und öffne die Seite direkt in Safari oder Chrome. Lade bei Bedarf die Seite neu.';
-  start.disabled = !modelReady || !secure; start.textContent = 'Erneut versuchen';
+  message.textContent = error?.name === 'NotAllowedError' ? 'Erlaube die Kamera in den Browser-Einstellungen und versuche es erneut.' : 'Prüfe die Kameraberechtigung und öffne die Seite direkt in Safari oder Chrome. Lade bei Bedarf die Seite neu.';
+  start.disabled = !states.some(s => s.ready) || !secure; start.textContent = 'Erneut versuchen';
 }
 function stopCamera() {
-  running = false; busy = false; wantsCamera = false;
-  releaseCamera();
+  running = false; busy = false; wantsCamera = false; releaseCamera();
   panel.hidden = false; stop.hidden = true; controls.hidden = true; frame.hidden = true;
-  status.textContent = 'Kamera gestoppt'; start.disabled = !modelReady || !secure; start.textContent = 'Kamera erneut starten';
+  status.textContent = 'Kamera gestoppt';
+  start.disabled = !states.some(s => s.ready) || !secure; start.textContent = 'Kamera erneut starten';
 }
+states.forEach(state => {
+  const option = document.createElement('option');option.value = state.id;option.textContent = state.name;selector.append(option);
+  state.model.addEventListener('model-loaded', () => normalize(state));
+  state.model.addEventListener('model-error', () => {state.error = true;updateReady();});
+  state.anchor.addEventListener('targetFound', () => {
+    if (!running || !state.ready) return;
+    visible.add(state.id);
+    if (!visible.has(selector.value)) {selector.value = state.id; slider.value = state.scale;}
+    refreshTracking();
+  });
+  state.anchor.addEventListener('targetLost', () => {visible.delete(state.id); refreshTracking();});
+  normalize(state);
+});
 start.addEventListener('click', async () => {
-  if (busy || running || !modelReady) return;
+  if (busy || running || !states.some(s => s.ready)) return;
   busy = true; wantsCamera = true; start.disabled = true; start.textContent = 'Kamera wird gestartet …';
   message.textContent = 'Erlaube jetzt den Kamerazugriff im Browser.';
-  try { await scene.systems['mindar-image-system'].start(); }
-  catch (error) { fail(error); }
+  try { await scene.systems['mindar-image-system'].start(); } catch (error) { fail(error); }
 });
 scene.addEventListener('arReady', () => {
   if (!wantsCamera || document.hidden) {setTimeout(stopCamera, 0); return;}
-  busy = false; running = true; panel.hidden = true; stop.hidden = false; frame.hidden = false; controls.hidden = false;
-  status.textContent = 'Kamera bereit · Scanbild suchen';
+  busy = false; running = true; panel.hidden = true; stop.hidden = false; controls.hidden = false; refreshTracking();
 });
 scene.addEventListener('arError', event => fail(event.detail));
-scene.addEventListener('loaded', () => {normalize(); ready();});
-model.addEventListener('model-loaded', normalize);
-model.addEventListener('model-error', () => {
-  status.textContent = '3D-Modell konnte nicht geladen werden';
-  message.textContent = 'Bitte prüfe deine Verbindung und lade die Seite erneut.';
-  start.textContent = 'Modell nicht verfügbar'; start.disabled = true;
-});
-target.addEventListener('targetFound', () => {if (running) {status.textContent = 'Bild erkannt · Dein Brunnen ist da'; frame.hidden = true;}});
-target.addEventListener('targetLost', () => {if (running) {status.textContent = 'Bild verloren · Kamera wieder auf das Scanbild richten'; frame.hidden = false;}});
+scene.addEventListener('loaded', () => {states.forEach(normalize);updateReady();});
+selector.addEventListener('change', () => {slider.value = active().scale;});
+slider.addEventListener('input', e => {const s=active();s.scale=Number(e.target.value);s.size.object3D.scale.setScalar(s.scale);});
+document.querySelector('#rotate').addEventListener('click', () => {const s=active();s.turn=(s.turn+45)%360;s.turntable.setAttribute('rotation',`0 ${s.turn} 0`);});
+document.querySelector('#reset').addEventListener('click', () => {const s=active();s.turn=0;s.scale=0.6;s.turntable.setAttribute('rotation','0 0 0');s.size.object3D.scale.setScalar(s.scale);slider.value=s.scale;});
 stop.addEventListener('click', stopCamera);
-document.querySelector('#scale').addEventListener('input', e => document.querySelector('#size').object3D.scale.setScalar(Number(e.target.value)));
-document.querySelector('#rotate').addEventListener('click', () => {turn = (turn + 45) % 360; document.querySelector('#turntable').setAttribute('rotation', `0 ${turn} 0`);});
-document.querySelector('#reset').addEventListener('click', reset);
 window.addEventListener('pagehide', stopCamera);
 document.addEventListener('visibilitychange', () => {if (document.hidden && (running || busy)) stopCamera();});
-if (!window.AFRAME || !scene.systems) {status.textContent = 'AR-Bibliotheken werden geladen …';}
-normalize(); ready();
+updateReady();
